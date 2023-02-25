@@ -15,7 +15,7 @@ const navLinks = [
   {
     name: "Top Games",
     icon: <Heart aria-hidden="true" className="h-6 w-6" />,
-    href: "/top-games",
+    href: "/favorited-games",
     isExternal: false,
   },
 ];
@@ -66,7 +66,7 @@ const Header = () => {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-md bg-transparent p-1.5 font-mono text-base text-white transition-colors hover:text-indigo-500 active:text-indigo-300"
+                className="rounded-md bg-transparent p-1.5 font-mono text-base text-white transition-colors hover:text-violet-500 active:text-violet-300"
               >
                 {link.icon}
               </a>
@@ -75,9 +75,9 @@ const Header = () => {
                 aria-label={`navigate to ${link.name} page`}
                 key={index}
                 href={link.href}
-                className={`rounded-md p-1.5 font-mono text-base transition-colors hover:text-indigo-500 active:text-indigo-300 ${
+                className={`rounded-md p-1.5 font-mono text-base transition-colors hover:text-violet-500 active:text-violet-300 ${
                   router.pathname === link.href
-                    ? "text-indigo-500"
+                    ? "text-violet-500"
                     : "text-white"
                 }`}
               >

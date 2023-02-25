@@ -106,7 +106,7 @@ const Home: NextPageWithLayout = () => {
               htmlFor="show"
               className="text-base font-medium text-gray-100"
             >
-              What show have you already watched?
+              What game have you played?
             </label>
             <input
               type="text"
@@ -126,6 +126,8 @@ const Home: NextPageWithLayout = () => {
             variant="primary"
             className="w-full"
             loadingVariant="dots"
+            isLoading={generateGameMutation.isLoading}
+            disabled={generateGameMutation.isLoading}
           >
             Discover your games
           </Button>
@@ -141,8 +143,8 @@ const Home: NextPageWithLayout = () => {
             </p>
           ) : generateGameMutation.isSuccess ? (
             <div className="grid place-items-center gap-8">
-              <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                Recommended shows
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                Recommended games
               </h2>
               <motion.div
                 className="grid w-full gap-3"
@@ -198,7 +200,7 @@ const GameCard = ({ game }: { game: OGame }) => {
       <div
         role="button"
         aria-label={`view ${game.name ?? ""} details`}
-        className="flex cursor-pointer flex-col gap-2 rounded-md bg-white/90 p-4 shadow-md ring-1 ring-gray-200 transition-colors hover:bg-gray-100 active:bg-gray-50"
+        className="flex cursor-pointer flex-col gap-2 rounded-md bg-neutral-700 p-4 shadow-md ring-1 ring-gray-400 transition-colors hover:bg-neutral-800 active:bg-neutral-700"
         onClick={() => {
           if (!game.name) return;
           findGameMutation.mutate({
@@ -207,11 +209,10 @@ const GameCard = ({ game }: { game: OGame }) => {
           setIsOpen(true);
         }}
       >
-        <h3 className="flex-1 text-base font-medium text-gray-900 sm:text-lg">
+        <h3 className="flex-1 text-base font-medium text-white sm:text-lg">
           {game.name}
         </h3>
-
-        <p className="text-xs text-gray-700 line-clamp-2 sm:text-sm">
+        <p className="text-xs text-gray-100 line-clamp-2 sm:text-sm">
           {game.description}
         </p>
       </div>
