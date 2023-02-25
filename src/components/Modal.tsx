@@ -15,6 +15,7 @@ import { api } from "@/utils/api";
 import { X } from "lucide-react";
 import LikeButton from "./LikeButton";
 import { type IGame } from "@/types/globals";
+import { extractYear } from "@/utils/format";
 
 type ModalProps = {
   isOpen: boolean;
@@ -32,8 +33,20 @@ const Modal = ({
   setIsLiked,
 }: ModalProps) => {
   const apiUtils = api.useContext();
+  const [dev, setDev] = useState<string>("");
   const [trailerId, setTrailerId] = useState<string>("");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  // set dev
+  useEffect(() => {
+    if (!game) return;
+    if (game.involved_companies) {
+      const dev = game.involved_companies.find((company) => company.developer);
+      if (dev) {
+        setDev(dev.company.name);
+      }
+    }
+  }, [game]);
 
   // set trailerId
   useEffect(() => {
@@ -101,7 +114,7 @@ const Modal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-md bg-white text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-md bg-neutral-900 text-left align-middle shadow-xl transition-all">
                 <div className="relative aspect-video">
                   <button
                     type="button"
@@ -130,85 +143,93 @@ const Modal = ({
                   <div className="flex items-center justify-between gap-5">
                     <Dialog.Title
                       as="h3"
-                      className="text-base font-medium leading-6 text-gray-900 sm:text-lg"
+                      className="text-base font-medium leading-6 text-white sm:text-lg"
                     >
                       {game.name}
                     </Dialog.Title>
-                    {/* <LikeButton
-                        aria-label={
-                          isLiked ? "add to favorites" : "remove from favorites"
-                        }
-                        isLiked={isLiked}
-                        onClick={() => {
-                          setIsLiked(!isLiked);
-                          updateGameMutation.mutate({
-                            tmdbId: show.id,
-                            name:
-                              show.title ?? show.original_title ?? show.name,
-                            description: show.overview ?? "",
-                            image: show.poster_path ?? show.backdrop_path ?? "",
-                            mediaType: mediaType,
-                            favoriteCount: isLiked ? -1 : 1,
-                            trailerId: trailerId,
-                            genres: show.genres.map(
-                              (genre) => genre.name ?? ""
-                            ),
-                            releaseDate:
-                              show.release_date ?? show.first_air_date ?? "",
-                            voteAverage: show.vote_average ?? 0,
-                            voteCount: show.vote_count ?? 0,
-                          });
-                        }}
-                      /> */}
+                    <LikeButton
+                      aria-label={
+                        isLiked ? "add to favorites" : "remove from favorites"
+                      }
+                      isLiked={isLiked}
+                      onClick={() => {
+                        setIsLiked(!isLiked);
+                        updateGameMutation.mutate({
+                          igdbId: game.id,
+                          name: game.name,
+                          description: game.summary ?? "",
+                          image: game.cover.url ?? "",
+                          avgRating: game.aggregated_rating ?? 0,
+                          avgRatingCount: game.aggregated_rating_count ?? 0,
+                          gameModes:
+                            game.game_modes.map((mode) => mode.name) ?? [],
+                          genres: game.genres.map((genre) => genre.name) ?? [],
+                          platforms:
+                            game.platforms.map((platform) => platform.name) ??
+                            [],
+                          developer: dev ?? "Unknown Dev",
+                          trailerId: trailerId,
+                          releaseDate:
+                            game.release_dates[game.release_dates.length - 1]
+                              ?.human ?? "",
+                          favoriteCount: isLiked ? -1 : 1,
+                        });
+                      }}
+                    />
                   </div>
-                  {/*                   
-                  <div className="flex items-center gap-2 text-xs sm:text-sm">
-                    {show.vote_average ? (
+                  <div className="flex items-center gap-2 text-xs text-gray-200 sm:text-sm">
+                    {game.aggregated_rating ? (
                       <Fragment>
                         <span className="font-medium text-green-600">
-                          {Math.round((Number(show.vote_average) / 10) * 100)}%
+                          {Math.round(Number(game.aggregated_rating))}%
                         </span>
                         <span>|</span>
                       </Fragment>
                     ) : null}
-                    {show.release_date || show.first_air_date ? (
+                    {game.release_dates ? (
                       <Fragment>
                         <span>
                           {extractYear(
-                            show.release_date ?? show.first_air_date
-                          )}
+                            game.release_dates[game.release_dates.length - 1]
+                              ?.human ?? "26 Feb 2023"
+                          ) ?? "Unknown Release Date"}
                         </span>
                         <span>|</span>
                       </Fragment>
                     ) : null}
-                    {show.number_of_seasons ? (
+                    {game.game_modes ? (
                       <Fragment>
-                        <span>{show.number_of_seasons} Seasons</span>
+                        <span>
+                          {game.game_modes
+                            .map((gmode) => gmode.name)
+                            .join(", ")}
+                        </span>
                         <span>|</span>
                       </Fragment>
                     ) : null}
-                    {show.original_language ? (
-                      <span>{show.original_language.toUpperCase()}</span>
-                    ) : null}
+                    {dev ? <span>{dev}</span> : null}
                   </div>
                   <div className="text-xs sm:text-sm">
-                    <span className="font-medium text-gray-900">Watch on:</span>{" "}
+                    <span className="font-medium text-white">Buy on:</span>{" "}
                     <a
-                      href={show.homepage}
+                      aria-label="buy on steam"
+                      href={`https://store.steampowered.com/search/?term=${game.name}`}
                       target="_blank"
                       rel="noreferrer"
                       className="text-blue-600 hover:underline"
                     >
-                      {show.homepage ?? "-"}
+                      Steam
                     </a>
                   </div>
-                  <p className="text-xs line-clamp-3 sm:text-sm">
-                    {show.overview ?? "-"}
+                  <p className="text-xs text-white line-clamp-3 sm:text-sm">
+                    {game.summary ?? "-"}
                   </p>
                   <div className="flex items-center gap-2 text-xs sm:text-sm">
-                    <span className="font-medium text-gray-900">Genres:</span>
-                    {show.genres.map((genre) => genre.name).join(", ")}
-                  </div> */}
+                    <span className="font-medium text-white">Genres:</span>
+                    <span className="text-gray-100">
+                      {game.genres.map((genre) => genre.name).join(", ")}
+                    </span>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

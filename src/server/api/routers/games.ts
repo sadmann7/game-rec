@@ -1,6 +1,5 @@
 import { env } from "@/env.mjs";
 import { type IGame } from "@/types/globals";
-import { GAME_MODE } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -40,15 +39,12 @@ export const gamesRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(100),
         cursor: z.string().nullish(),
-        gameMode: z.nativeEnum(GAME_MODE).optional().nullable(),
       })
     )
     .query(async ({ ctx, input }) => {
       const pGames = await ctx.prisma.pGame.findMany({
         take: input.limit + 1,
-        where: {
-          gameMode: input.gameMode ? { equals: input.gameMode } : undefined,
-        },
+        where: {},
         distinct: ["id"],
         cursor: input.cursor ? { id: input.cursor } : undefined,
         orderBy: {
@@ -70,13 +66,13 @@ export const gamesRouter = createTRPCRouter({
   update: publicProcedure
     .input(
       z.object({
-        id: z.string(),
+        igdbId: z.number(),
         name: z.string(),
         description: z.string(),
         image: z.string(),
         avgRating: z.number().min(0),
         avgRatingCount: z.number().min(0),
-        gameMode: z.nativeEnum(GAME_MODE),
+        gameModes: z.array(z.string()),
         genres: z.array(z.string()),
         platforms: z.array(z.string()),
         developer: z.string(),
@@ -88,7 +84,7 @@ export const gamesRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const pGame = await ctx.prisma.pGame.upsert({
         where: {
-          id: input.id,
+          igdbId: input.igdbId,
         },
         update: {
           favoriteCount: {
@@ -96,12 +92,13 @@ export const gamesRouter = createTRPCRouter({
           },
         },
         create: {
+          igdbId: input.igdbId,
           name: input.name,
           description: input.description,
           image: input.image,
           avgRating: input.avgRating,
           avgRatingCount: input.avgRatingCount,
-          gameMode: input.gameMode,
+          gameModes: input.gameModes,
           genres: input.genres,
           platforms: input.platforms,
           developer: input.developer,

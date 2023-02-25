@@ -15,25 +15,20 @@ model GenCount {
 }
 
 model PGame {
-    id             String    @id @default(cuid())
-    igdbId         Int       @unique
+    id             String   @id @default(cuid())
+    igdbId         Int      @unique
     name           String
     description    String
     image          String
     avgRating      Float
     avgRatingCount Int
-    gameMode       GAME_MODE
+    gameModes      String[]
     genres         String[]
     platforms      String[]
     developer      String
     trailerId      String
     releaseDate    String
-    favoriteCount  Int       @default(0)
-    createdAt      DateTime  @default(now())
-    updatedAt      DateTime  @updatedAt
-}
-
-enum GAME_MODE {
-    SINGLE_PLAYER
-    MULTIPLAYER
+    favoriteCount  Int      @default(0)
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
 }
