@@ -12,13 +12,17 @@ import type { NextPageWithLayout } from "./_app";
 import Button from "@/components/Button";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
+import { api } from "@/utils/api";
 
 const schema = z.object({
-  game: z.string().min(1, { message: "Please enter a game" }),
+  query: z.string().min(1, { message: "Please enter a game" }),
 });
 type Inputs = z.infer<typeof schema>;
 
 const Home: NextPageWithLayout = () => {
+  // get games query
+  const getGamesQuery = api.openai.getGames.useQuery({ query: "Half-Life 2" });
+
   // react-hook-form
   const { register, handleSubmit, formState } = useForm<Inputs>({
     resolver: zodResolver(schema),
@@ -76,19 +80,22 @@ const Home: NextPageWithLayout = () => {
           onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
         >
           <fieldset className="grid gap-3">
-            <label htmlFor="show" className="text-base font-medium text-white">
+            <label
+              htmlFor="show"
+              className="text-base font-medium text-gray-100"
+            >
               What show have you already watched?
             </label>
             <input
               type="text"
               id="show"
-              className="w-full rounded-md border-gray-300 bg-transparent px-4 py-2.5 text-base text-white transition-colors placeholder:text-gray-300"
+              className="w-full rounded-md border-gray-300 bg-transparent px-4 py-2.5 text-base text-white transition-colors placeholder:text-gray-400"
               placeholder="e.g. Half-Life 2"
-              {...register("game")}
+              {...register("query")}
             />
-            {formState.errors.game ? (
+            {formState.errors.query ? (
               <p className="-mt-1 text-sm font-medium text-red-500">
-                {formState.errors.game.message}
+                {formState.errors.query.message}
               </p>
             ) : null}
           </fieldset>
