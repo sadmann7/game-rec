@@ -8,6 +8,9 @@ const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   OPENAI_API_KEY: z.string().min(1),
+  IGDB_CLIENT_ID: z.string().min(1),
+  IGDB_CLIENT_SECRET: z.string().min(1),
+  IGDB_ACCESS_TOKEN: z.string().min(1),
 });
 
 /**
@@ -28,6 +31,9 @@ const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  IGDB_CLIENT_ID: process.env.IGDB_CLIENT_ID,
+  IGDB_CLIENT_SECRET: process.env.IGDB_CLIENT_SECRET,
+  IGDB_ACCESS_TOKEN: process.env.IGDB_ACCESS_TOKEN,
 };
 
 // Don't touch the part below
