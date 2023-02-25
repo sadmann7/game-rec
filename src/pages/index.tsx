@@ -12,17 +12,13 @@ import type { NextPageWithLayout } from "./_app";
 import Button from "@/components/Button";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
-import { api } from "@/utils/api";
 
 const schema = z.object({
-  query: z.string().min(1, { message: "Please enter a game" }),
+  game: z.string().min(1, { message: "Please enter a game" }),
 });
 type Inputs = z.infer<typeof schema>;
 
 const Home: NextPageWithLayout = () => {
-  // get games query
-  const getGamesQuery = api.openai.getGames.useQuery({ query: "Half-Life 2" });
-
   // react-hook-form
   const { register, handleSubmit, formState } = useForm<Inputs>({
     resolver: zodResolver(schema),
@@ -91,11 +87,11 @@ const Home: NextPageWithLayout = () => {
               id="show"
               className="w-full rounded-md border-gray-300 bg-transparent px-4 py-2.5 text-base text-white transition-colors placeholder:text-gray-400"
               placeholder="e.g. Half-Life 2"
-              {...register("query")}
+              {...register("game")}
             />
-            {formState.errors.query ? (
+            {formState.errors.game ? (
               <p className="-mt-1 text-sm font-medium text-red-500">
-                {formState.errors.query.message}
+                {formState.errors.game.message}
               </p>
             ) : null}
           </fieldset>

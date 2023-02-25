@@ -17,8 +17,8 @@ export type IGame = {
   release_dates: {
     human: string;
   }[];
-  aggregated_rating: number;
-  aggregated_rating_count: number;
+  aggregated_rating?: number;
+  aggregated_rating_count?: number;
   game_modes: {
     name: string;
   }[];
@@ -31,14 +31,14 @@ export type IGame = {
         id: number;
         url: string;
       };
-      websites: {
+      websites?: {
         url: string;
       }[];
     };
     developer: boolean;
     publisher: boolean;
   }[];
-  videos: {
+  videos?: {
     id: number;
     video_id: string;
   }[];

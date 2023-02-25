@@ -1,5 +1,5 @@
-import { exampleRouter } from "@/server/api/routers/example";
 import { createTRPCRouter } from "@/server/api/trpc";
+import { gamesRouter } from "./routers/games";
 import { openaiRouter } from "./routers/openai";
 
 /**
@@ -8,8 +8,8 @@ import { openaiRouter } from "./routers/openai";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
   openai: openaiRouter,
+  games: gamesRouter,
 });
 
 // export type definition of API

@@ -1,5 +1,3 @@
-import { env } from "@/env.mjs";
-import { type IGame } from "@/types/globals";
 import { configuration } from "@/utils/openai";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -9,7 +7,7 @@ export const openaiRouter = createTRPCRouter({
   generate: publicProcedure
     .input(
       z.object({
-        show: z.string().min(1),
+        game: z.string().min(1),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -21,9 +19,8 @@ export const openaiRouter = createTRPCRouter({
         });
       }
 
-      const prompt = `I have watched ${input.show}. Suggest me 5 popular shows of the same genre or mood that I might like. 
-      Make sure to add a small description, and type (tv or movie). You can use the following template: 1. Name - Description - Type.
-      `;
+      const prompt = `I have played ${input.game}. Suggest me 5 popular games of the same genre or mood that I might like. 
+      Make sure to add a small description. You can use the following template: 1. Name - Description - Type.`;
 
       if (!prompt) {
         throw new TRPCError({
@@ -56,29 +53,36 @@ export const openaiRouter = createTRPCRouter({
         });
       }
 
-      return completion.data.choices[0].text;
-    }),
+      const formattedData = completion.data.choices[0].text
+        .split("\n")
+        .filter((show) => show !== "")
+        .map((show) => {
+          const [name, description] = show.split("- ");
+          return {
+            name: name?.replace(/[0-9]+. /, "").trim(),
+            description: description?.trim(),
+          };
+        });
 
-  getGames: publicProcedure
-    .input(
-      z.object({
-        query: z.string().min(1),
-      })
-    )
-    .query(async ({ input }) => {
-      const response = await fetch(
-        `https://api.igdb.com/v4/games/?search=${input.query}&fields=name,cover.url,genres.name,platforms.name,summary,release_dates.human,aggregated_rating,aggregated_rating_count,game_modes.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,involved_companies.company.logo.url,involved_companies.company.websites.url,involved_companies.company.websites,videos.video_id; where rating > 75;
-      `,
-        {
-          method: "POST",
-          headers: {
-            "Client-ID": env.IGDB_CLIENT_ID,
-            Authorization: `Bearer ${env.IGDB_ACCESS_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = (await response.json()) as IGame[];
-      return data;
+      const genCount = await ctx.prisma.genCount.findFirst();
+      if (!genCount) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Generation count not found.",
+        });
+      }
+      await ctx.prisma.genCount.update({
+        where: {
+          id: genCount.id,
+        },
+        data: {
+          count: genCount.count + formattedData.length,
+        },
+      });
+
+      return {
+        formattedData,
+        generations: genCount.count + formattedData.length,
+      };
     }),
 });
