@@ -3,6 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import Head from "next/head";
 import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
 import Balancer from "react-wrap-balancer";
 import { z } from "zod";
@@ -11,6 +12,7 @@ import type { NextPageWithLayout } from "./_app";
 // external imports
 import Button from "@/components/Button";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import { api } from "@/utils/api";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
 
 const schema = z.object({
@@ -19,12 +21,23 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>;
 
 const Home: NextPageWithLayout = () => {
+  // generate game mutation
+  const generateGameMutation = api.openai.generate.useMutation({
+    onSuccess: () => {
+      toast.success("Game generated successfully");
+    },
+    onError: () => {
+      toast.error("Failed to generate game");
+    },
+  });
+
   // react-hook-form
   const { register, handleSubmit, formState } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    // console.log(data);
+    await generateGameMutation.mutateAsync({ ...data });
   };
 
   // framer-motion

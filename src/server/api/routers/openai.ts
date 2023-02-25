@@ -19,8 +19,11 @@ export const openaiRouter = createTRPCRouter({
         });
       }
 
-      const prompt = `I have played ${input.game}. Suggest me 5 popular games of the same genre or mood that I might like. 
-      Make sure to add a small description. You can use the following template: 1. Name - Description - Type.`;
+      const prompt = `Suggest me 5 popular games of the same genre or mood as ${input.game}. 
+      Make sure to add a small description. """ 
+      You can use the following template: 1. Name - Description. 
+      For example: 1. The Last of Us - A post-apocalyptic survival horror game. 
+      """`;
 
       if (!prompt) {
         throw new TRPCError({
@@ -55,7 +58,7 @@ export const openaiRouter = createTRPCRouter({
 
       const formattedData = completion.data.choices[0].text
         .split("\n")
-        .filter((show) => show !== "")
+        .filter((show) => show !== "" ?? show !== undefined ?? show !== null)
         .map((show) => {
           const [name, description] = show.split("- ");
           return {
