@@ -31,7 +31,7 @@ export const gamesRouter = createTRPCRouter({
         });
       }
       const games = (await response.json()) as IGame[];
-      const firstGame = games[0];
+      const firstGame = games[0] as IGame;
       return firstGame;
     }),
 

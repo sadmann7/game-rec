@@ -43,3 +43,8 @@ export type IGame = {
     video_id: string;
   }[];
 };
+
+export type OGame = {
+  name?: string;
+  description?: string;
+};

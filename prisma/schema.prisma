@@ -16,6 +16,7 @@ model GenCount {
 
 model PGame {
     id             String    @id @default(cuid())
+    igdbId         Int       @unique
     name           String
     description    String
     image          String

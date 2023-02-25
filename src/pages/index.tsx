@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, useAnimation } from "framer-motion";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
@@ -14,6 +14,8 @@ import Button from "@/components/Button";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { api } from "@/utils/api";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
+import { OGame } from "@/types/globals";
+import Modal from "@/components/Modal";
 
 const schema = z.object({
   game: z.string().min(1, { message: "Please enter a game" }),
@@ -23,8 +25,8 @@ type Inputs = z.infer<typeof schema>;
 const Home: NextPageWithLayout = () => {
   // generate game mutation
   const generateGameMutation = api.openai.generate.useMutation({
-    onSuccess: () => {
-      toast.success("Game generated successfully");
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: () => {
       toast.error("Failed to generate game");
@@ -39,6 +41,17 @@ const Home: NextPageWithLayout = () => {
     // console.log(data);
     await generateGameMutation.mutateAsync({ ...data });
   };
+
+  // scroll to recommended shows
+  const generatedRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!generatedRef.current || !generateGameMutation.data) return;
+    const offset = generatedRef.current.offsetTop - 90;
+    window.scrollTo({
+      top: offset,
+      behavior: "smooth",
+    });
+  }, [generateGameMutation.data]);
 
   // framer-motion
   const [ref, inView] = useInView({
@@ -117,6 +130,32 @@ const Home: NextPageWithLayout = () => {
             Discover your games
           </Button>
         </motion.form>
+        <motion.div
+          className="mt-12 w-full max-w-3xl"
+          ref={generatedRef}
+          variants={itemFadeDown}
+        >
+          {generateGameMutation.isError ? (
+            <p className="text-red-500">
+              {generateGameMutation.error?.message}
+            </p>
+          ) : generateGameMutation.isSuccess ? (
+            <div className="grid place-items-center gap-8">
+              <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+                Recommended shows
+              </h2>
+              <motion.div
+                className="grid w-full gap-3"
+                ref={ref}
+                variants={containerReveal}
+              >
+                {generateGameMutation.data.formattedData.map((game) => (
+                  <GameCard key={game.name} game={game} />
+                ))}
+              </motion.div>
+            </div>
+          ) : null}
+        </motion.div>
       </motion.main>
     </>
   );
@@ -125,3 +164,57 @@ const Home: NextPageWithLayout = () => {
 export default Home;
 
 Home.getLayout = (page) => <DefaultLayout>{page}</DefaultLayout>;
+
+const GameCard = ({ game }: { game: OGame }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+
+  // find show mutation
+  const findGameMutation = api.games.findOne.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  if (findGameMutation.isError) {
+    toast.error(findGameMutation.error?.message);
+    return null;
+  }
+
+  return (
+    <motion.div className="rounded-md bg-blue-900/20" variants={itemFadeDown}>
+      {findGameMutation.isSuccess ? (
+        <Modal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          game={findGameMutation.data}
+          isLiked={isLiked}
+          setIsLiked={setIsLiked}
+        />
+      ) : null}
+      <div
+        role="button"
+        aria-label={`view ${game.name ?? ""} details`}
+        className="flex cursor-pointer flex-col gap-2 rounded-md bg-white/90 p-4 shadow-md ring-1 ring-gray-200 transition-colors hover:bg-gray-100 active:bg-gray-50"
+        onClick={() => {
+          if (!game.name) return;
+          findGameMutation.mutate({
+            query: game.name,
+          });
+          setIsOpen(true);
+        }}
+      >
+        <h3 className="flex-1 text-base font-medium text-gray-900 sm:text-lg">
+          {game.name}
+        </h3>
+
+        <p className="text-xs text-gray-700 line-clamp-2 sm:text-sm">
+          {game.description}
+        </p>
+      </div>
+    </motion.div>
+  );
+};
