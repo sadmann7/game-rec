@@ -37,7 +37,7 @@ export const gamesRouter = createTRPCRouter({
   getTop: publicProcedure.query(async () => {
     const currentYear = new Date().getFullYear();
     const response = await fetch(
-      `https://api.rawg.io/api/games?key=${env.RAWG_API_KEY}&dates=${currentYear}-01-01,${currentYear}-12-31&ordering=-rating&page_size=10`
+      `https://api.rawg.io/api/games?key=${env.RAWG_API_KEY}&dates=${currentYear}-01-01,${currentYear}-12-31&ordering=-rating&page_size=20`
     );
     if (!response.ok) {
       throw new TRPCError({
