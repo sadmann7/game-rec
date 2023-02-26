@@ -58,6 +58,13 @@ export type RGameResult = {
   slug: string;
   name: string;
   released: string;
+  clip: string | null;
+  dominant_color: string;
+  genres: {
+    id: number;
+    name: string;
+    slug: string;
+  }[];
   tba: boolean;
   background_image: string;
   rating: number;
@@ -87,7 +94,7 @@ export type RGameResult = {
     id: number;
     slug: string;
     name: string;
-  };
+  } | null;
   platforms: {
     platform: {
       id: number;
@@ -98,6 +105,13 @@ export type RGameResult = {
     requirements: {
       minimum: string;
       recommended: string;
+    };
+  }[];
+  stores?: {
+    store: {
+      id: number;
+      slug: string;
+      name: string;
     };
   }[];
 };

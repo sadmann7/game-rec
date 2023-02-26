@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { type AppType } from "next/app";
-import Head from "next/head";
 import { type ReactElement, type ReactNode } from "react";
 import { Provider as RWBProvider } from "react-wrap-balancer";
 
@@ -28,9 +27,6 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   return (
     <RWBProvider>
-      <Head>
-        <title>Game Recommender</title>
-      </Head>
       {getLayout(<Component {...pageProps} />)}
       <ToasterWrapper />
     </RWBProvider>

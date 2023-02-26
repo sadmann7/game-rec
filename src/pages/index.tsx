@@ -11,7 +11,7 @@ import type { NextPageWithLayout } from "./_app";
 
 // external imports
 import Button from "@/components/Button";
-import Carousel from "@/components/Carousel";
+import Hero from "@/components/Hero";
 import Modal from "@/components/Modal";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import ErrorScreen from "@/screens/ErrorScreen";
@@ -90,93 +90,93 @@ const Home: NextPageWithLayout = () => {
         <title>Game Recommender</title>
       </Head>
       <motion.main
-        className="container mx-auto mt-28 mb-10 grid w-full justify-items-center gap-10 px-4"
+        className="mb-10"
         initial="hidden"
         whileInView="visible"
         animate="visible"
         viewport={{ once: true }}
         variants={containerReveal}
       >
-        {topGamesQuery.isSuccess ? (
-          <Carousel
-            data={topGamesQuery.data.filter((game) => game.background_image)}
-          />
-        ) : null}
-        <motion.div
-          className="flex max-w-5xl flex-col items-center gap-6"
-          variants={itemFadeDown}
-        >
-          <h1 className="mx-auto text-center text-4xl font-bold text-white sm:text-6xl">
-            <Balancer ratio={0.5}>Discover your next favorite game</Balancer>
-          </h1>
-          <p className="w-full max-w-3xl text-center text-base text-gray-300 sm:text-lg">
-            Enter a game you have already played and we will recommend you
-            similar games with AI
-          </p>
-        </motion.div>
-        <motion.form
-          aria-label="generate show from"
-          className="mt-5 grid w-full max-w-3xl gap-5"
-          variants={itemFadeDown}
-          onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
-        >
-          <fieldset className="grid gap-3">
-            <label
-              htmlFor="show"
-              className="text-base font-medium text-gray-100"
-            >
-              What game have you played?
-            </label>
-            <input
-              type="text"
-              id="show"
-              className="w-full rounded-md border-gray-300 bg-transparent px-4 py-2.5 text-base text-white transition-colors placeholder:text-gray-400"
-              placeholder="e.g. Half-Life 2"
-              {...register("game")}
-            />
-            {formState.errors.game ? (
-              <p className="-mt-1 text-sm font-medium text-red-500">
-                {formState.errors.game.message}
-              </p>
-            ) : null}
-          </fieldset>
-          <Button
-            aria-label="discover your shows"
-            variant="primary"
-            className="w-full"
-            loadingVariant="dots"
-            isLoading={generateGameMutation.isLoading}
-            disabled={generateGameMutation.isLoading}
+        <Hero
+          data={topGamesQuery.data.filter((game) => game.background_image)}
+        />
+        <div className="container mx-auto grid place-items-center gap-10">
+          <motion.div
+            className="flex max-w-5xl flex-col items-center gap-6"
+            variants={itemFadeDown}
           >
-            Discover your games
-          </Button>
-        </motion.form>
-        <motion.div
-          className="mt-5 w-full max-w-3xl"
-          ref={generatedRef}
-          variants={itemFadeDown}
-        >
-          {generateGameMutation.isError ? (
-            <p className="text-red-500">
-              {generateGameMutation.error?.message}
+            <h1 className="mx-auto text-center text-4xl font-bold text-white sm:text-6xl">
+              <Balancer ratio={0.5}>Discover your next favorite game</Balancer>
+            </h1>
+            <p className="w-full max-w-3xl text-center text-base text-gray-300 sm:text-lg">
+              Enter a game you have already played and we will recommend you
+              similar games with AI
             </p>
-          ) : generateGameMutation.isSuccess ? (
-            <div className="grid place-items-center gap-8">
-              <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                Recommended games
-              </h2>
-              <motion.div
-                className="grid w-full gap-3"
-                ref={ref}
-                variants={containerReveal}
+          </motion.div>
+          <motion.form
+            aria-label="generate show from"
+            className="mt-5 grid w-full max-w-3xl gap-5"
+            variants={itemFadeDown}
+            onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
+          >
+            <fieldset className="grid gap-3">
+              <label
+                htmlFor="show"
+                className="text-base font-medium text-gray-100"
               >
-                {generateGameMutation.data.formattedData.map((game) => (
-                  <GameCard key={game.name} game={game} />
-                ))}
-              </motion.div>
-            </div>
-          ) : null}
-        </motion.div>
+                What game have you played?
+              </label>
+              <input
+                type="text"
+                id="show"
+                className="w-full rounded-md border-gray-300 bg-transparent px-4 py-2.5 text-base text-white transition-colors placeholder:text-gray-400"
+                placeholder="e.g. Half-Life 2"
+                {...register("game")}
+              />
+              {formState.errors.game ? (
+                <p className="-mt-1 text-sm font-medium text-red-500">
+                  {formState.errors.game.message}
+                </p>
+              ) : null}
+            </fieldset>
+            <Button
+              aria-label="discover your shows"
+              variant="primary"
+              className="w-full"
+              loadingVariant="dots"
+              isLoading={generateGameMutation.isLoading}
+              disabled={generateGameMutation.isLoading}
+            >
+              Discover your games
+            </Button>
+          </motion.form>
+          <motion.div
+            className="mt-5 w-full max-w-3xl"
+            ref={generatedRef}
+            variants={itemFadeDown}
+          >
+            {generateGameMutation.isError ? (
+              <p className="text-red-500">
+                {generateGameMutation.error?.message}
+              </p>
+            ) : generateGameMutation.isSuccess ? (
+              <div className="grid place-items-center gap-8">
+                <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                  Recommended games
+                </h2>
+                <motion.div
+                  className="grid w-full gap-3"
+                  ref={ref}
+                  variants={containerReveal}
+                >
+                  {generateGameMutation.data.formattedData.map((game) => (
+                    <GameCard key={game.name} game={game} />
+                  ))}
+                </motion.div>
+              </div>
+            ) : null}
+          </motion.div>
+        </div>
       </motion.main>
     </>
   );
