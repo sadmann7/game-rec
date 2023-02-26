@@ -12,12 +12,12 @@ const ErrorScreen = ({ error }: { error?: TRPCClientErrorLike<AppRouter> }) => {
         {error?.message ?? "Something went wrong"}
       </h1>
       <table className="mt-2.5">
-        <thead className="text-base font-medium text-gray-900 md:text-lg">
+        <thead className="text-base font-medium text-white md:text-lg">
           <tr>
             <th>Try doing these:</th>
           </tr>
         </thead>
-        <tbody className="text-base font-medium text-gray-700 md:text-lg">
+        <tbody className="text-base font-medium text-gray-300 md:text-lg">
           <tr>
             <td>1. Spine transfer to nosegrab frontflip</td>
           </tr>

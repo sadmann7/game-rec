@@ -30,7 +30,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
           pauseOnMouseEnter: true,
         }}
         modules={[Autoplay]}
-        className="relative h-96 w-full"
+        className="relative aspect-video h-full max-h-96 w-full"
       >
         {data.map((game) => (
           <SwiperSlide key={game.id}>
@@ -58,22 +58,38 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("pc")
                 ) ? (
-                  <GrWindows className="text-white" size={20} />
+                  <GrWindows
+                    key={crypto.randomUUID()}
+                    className="text-white"
+                    size={20}
+                  />
                 ) : null}
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("playstation")
                 ) ? (
-                  <IoLogoPlaystation className="text-white" size={20} />
+                  <IoLogoPlaystation
+                    key={crypto.randomUUID()}
+                    className="text-white"
+                    size={20}
+                  />
                 ) : null}
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("xbox")
                 ) ? (
-                  <IoLogoXbox className="text-white" size={20} />
+                  <IoLogoXbox
+                    key={crypto.randomUUID()}
+                    className="text-white"
+                    size={20}
+                  />
                 ) : null}
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("switch")
                 ) ? (
-                  <SiNintendoswitch className="text-white" size={20} />
+                  <SiNintendoswitch
+                    key={crypto.randomUUID()}
+                    className="text-white"
+                    size={20}
+                  />
                 ) : null}
               </div>
               <div className="flex items-center gap-2">
@@ -84,24 +100,68 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
                     )?.[0]
                   ) {
                     case "steam":
-                      return <SiSteam className="text-white" size={20} />;
+                      return (
+                        <SiSteam
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
+                      );
                     case "epic":
-                      return <SiEpicgames className="text-white" size={20} />;
+                      return (
+                        <SiEpicgames
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
+                      );
                     case "gog":
-                      return <SiGogdotcom className="text-white" size={20} />;
+                      return (
+                        <SiGogdotcom
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
+                      );
                     case "riot":
-                      return <SiRiotgames className="text-white" size={20} />;
+                      return (
+                        <SiRiotgames
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
+                      );
                     case "activision":
-                      return <SiActivision className="text-white" size={20} />;
+                      return (
+                        <SiActivision
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
+                      );
                     case "playstation":
                       return (
-                        <IoLogoPlaystation className="text-white" size={20} />
+                        <IoLogoPlaystation
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
                       );
                     case "xbox":
-                      return <IoLogoXbox className="text-white" size={20} />;
+                      return (
+                        <IoLogoXbox
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
+                      );
                     case "switch":
                       return (
-                        <SiNintendoswitch className="text-white" size={20} />
+                        <SiNintendoswitch
+                          key={store.store.id}
+                          className="text-white"
+                          size={20}
+                        />
                       );
                     default:
                       return null;

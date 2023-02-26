@@ -6,10 +6,10 @@ const Stars = ({ rating }: { rating: number }) => {
   for (let i = 0; i < 5; i++) {
     if (i < rating) {
       stars.push(
-        <Star className="fill-orange-400 text-orange-400" size={16} />
+        <Star key={i} className="fill-orange-400 text-orange-400" size={16} />
       );
     } else {
-      stars.push(<Star className="text-gray-300" size={16} />);
+      stars.push(<Star key={i} className="text-gray-300" size={16} />);
     }
   }
 
