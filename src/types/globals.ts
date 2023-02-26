@@ -1,3 +1,4 @@
+// IGDB API response
 export type IGame = {
   id: number;
   name: string;
@@ -44,6 +45,7 @@ export type IGame = {
   }[];
 };
 
+// OpenAI response
 export type OGame = {
   name?: string;
   description?: string;

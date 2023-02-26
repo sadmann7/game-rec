@@ -11,11 +11,11 @@ import type { NextPageWithLayout } from "./_app";
 
 // external imports
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import { type OGame } from "@/types/globals";
 import { api } from "@/utils/api";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
-import { OGame } from "@/types/globals";
-import Modal from "@/components/Modal";
 
 const schema = z.object({
   game: z.string().min(1, { message: "Please enter a game" }),
@@ -32,6 +32,9 @@ const Home: NextPageWithLayout = () => {
       toast.error("Failed to generate game");
     },
   });
+
+  // get top games query
+  const topGamesQuery = api.games.getTop.useQuery();
 
   // react-hook-form
   const { register, handleSubmit, formState } = useForm<Inputs>({

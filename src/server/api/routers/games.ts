@@ -34,6 +34,28 @@ export const gamesRouter = createTRPCRouter({
       return firstGame;
     }),
 
+  getTop: publicProcedure.query(async () => {
+    const response = await fetch(
+      `https://api.igdb.com/v4/games/?fields=name,cover.url,genres.name,platforms.name,summary,release_dates.human,aggregated_rating,aggregated_rating_count,game_modes.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,involved_companies.company.logo.url,involved_companies.company.websites.url,involved_companies.company.websites,videos.video_id;&order=rating:desc&limit=10`,
+      {
+        method: "POST",
+        headers: {
+          "Client-ID": env.IGDB_CLIENT_ID,
+          Authorization: `Bearer ${env.IGDB_ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: `IGDB returned ${response.status} ${response.statusText}`,
+      });
+    }
+    const games = (await response.json()) as IGame[];
+    return games;
+  }),
+
   getPaginated: publicProcedure
     .input(
       z.object({

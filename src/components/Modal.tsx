@@ -224,12 +224,14 @@ const Modal = ({
                   <p className="text-xs text-white line-clamp-3 sm:text-sm">
                     {game.summary ?? "-"}
                   </p>
-                  <div className="flex items-center gap-2 text-xs sm:text-sm">
-                    <span className="font-medium text-white">Genres:</span>
-                    <span className="text-gray-100">
-                      {game.genres.map((genre) => genre.name).join(", ")}
-                    </span>
-                  </div>
+                  {game.genres ? (
+                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                      <span className="font-medium text-white">Genres:</span>
+                      <span className="text-gray-100">
+                        {game.genres.map((genre) => genre.name).join(", ")}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

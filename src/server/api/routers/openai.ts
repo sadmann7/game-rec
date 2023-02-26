@@ -58,14 +58,15 @@ export const openaiRouter = createTRPCRouter({
 
       const formattedData = completion.data.choices[0].text
         .split("\n")
-        .filter((show) => show !== "" ?? show !== undefined ?? show !== null)
+        .filter((show) => show !== "")
         .map((show) => {
           const [name, description] = show.split("- ");
           return {
             name: name?.replace(/[0-9]+. /, "").trim(),
             description: description?.trim(),
           };
-        });
+        })
+        .filter((show) => show.name && show.description);
 
       const genCount = await ctx.prisma.genCount.findFirst();
       if (!genCount) {
