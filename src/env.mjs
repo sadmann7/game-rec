@@ -11,6 +11,7 @@ const server = z.object({
   IGDB_CLIENT_ID: z.string().min(1),
   IGDB_CLIENT_SECRET: z.string().min(1),
   IGDB_ACCESS_TOKEN: z.string().min(1),
+  RAWG_API_KEY: z.string().min(1),
 });
 
 /**
@@ -34,6 +35,7 @@ const processEnv = {
   IGDB_CLIENT_ID: process.env.IGDB_CLIENT_ID,
   IGDB_CLIENT_SECRET: process.env.IGDB_CLIENT_SECRET,
   IGDB_ACCESS_TOKEN: process.env.IGDB_ACCESS_TOKEN,
+  RAWG_API_KEY: process.env.RAWG_API_KEY,
 };
 
 // Don't touch the part below

@@ -1,5 +1,5 @@
 import { env } from "@/env.mjs";
-import { type IGame } from "@/types/globals";
+import type { IGame, RGame } from "@/types/globals";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -35,25 +35,18 @@ export const gamesRouter = createTRPCRouter({
     }),
 
   getTop: publicProcedure.query(async () => {
+    const currentYear = new Date().getFullYear();
     const response = await fetch(
-      `https://api.igdb.com/v4/games/?fields=name,cover.url,genres.name,platforms.name,summary,release_dates.human,aggregated_rating,aggregated_rating_count,game_modes.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,involved_companies.company.logo.url,involved_companies.company.websites.url,involved_companies.company.websites,videos.video_id;&order=rating:desc&limit=10`,
-      {
-        method: "POST",
-        headers: {
-          "Client-ID": env.IGDB_CLIENT_ID,
-          Authorization: `Bearer ${env.IGDB_ACCESS_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
+      `https://api.rawg.io/api/games?key=${env.RAWG_API_KEY}&dates=${currentYear}-01-01,${currentYear}-12-31&ordering=-rating&page_size=10`
     );
     if (!response.ok) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: `IGDB returned ${response.status} ${response.statusText}`,
+        message: `RAWG returned ${response.status} ${response.statusText}`,
       });
     }
-    const games = (await response.json()) as IGame[];
-    return games;
+    const games = (await response.json()) as RGame;
+    return games.results;
   }),
 
   getPaginated: publicProcedure

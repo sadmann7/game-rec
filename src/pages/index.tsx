@@ -11,8 +11,11 @@ import type { NextPageWithLayout } from "./_app";
 
 // external imports
 import Button from "@/components/Button";
+import Carousel from "@/components/Carousel";
 import Modal from "@/components/Modal";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import ErrorScreen from "@/screens/ErrorScreen";
+import LoadingScreen from "@/screens/LoadingScreen";
 import { type OGame } from "@/types/globals";
 import { api } from "@/utils/api";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
@@ -73,21 +76,34 @@ const Home: NextPageWithLayout = () => {
     return () => controls.stop();
   }, [controls, inView]);
 
+  if (topGamesQuery.isLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (topGamesQuery.isError) {
+    return <ErrorScreen error={topGamesQuery.error} />;
+  }
+
   return (
     <>
       <Head>
         <title>Game Recommender</title>
       </Head>
       <motion.main
-        className="container mx-auto mt-28 mb-10 grid w-full max-w-5xl justify-items-center px-4"
+        className="container mx-auto mt-28 mb-10 grid w-full justify-items-center gap-10 px-4"
         initial="hidden"
         whileInView="visible"
         animate="visible"
         viewport={{ once: true }}
         variants={containerReveal}
       >
+        {topGamesQuery.isSuccess ? (
+          <Carousel
+            data={topGamesQuery.data.filter((game) => game.background_image)}
+          />
+        ) : null}
         <motion.div
-          className="flex flex-col items-center gap-6"
+          className="flex max-w-5xl flex-col items-center gap-6"
           variants={itemFadeDown}
         >
           <h1 className="mx-auto text-center text-4xl font-bold text-white sm:text-6xl">
@@ -100,7 +116,7 @@ const Home: NextPageWithLayout = () => {
         </motion.div>
         <motion.form
           aria-label="generate show from"
-          className="mt-8 grid w-full max-w-3xl gap-5"
+          className="mt-5 grid w-full max-w-3xl gap-5"
           variants={itemFadeDown}
           onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
         >
@@ -136,7 +152,7 @@ const Home: NextPageWithLayout = () => {
           </Button>
         </motion.form>
         <motion.div
-          className="mt-12 w-full max-w-3xl"
+          className="mt-5 w-full max-w-3xl"
           ref={generatedRef}
           variants={itemFadeDown}
         >
