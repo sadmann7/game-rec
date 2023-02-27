@@ -28,7 +28,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
         {data.map((game) => (
           <SwiperSlide key={game.id}>
             <div className="absolute inset-0 -z-10 h-screen w-full">
-              <div className="absolute inset-0 z-10 h-full w-full bg-black/60 bg-gradient-body from-gray-900/10 to-[#010511]" />
+              <div className="absolute inset-0 z-10 h-full w-full bg-black/60 bg-gradient-body from-neutral-900/20 to-black/80" />
               <Image
                 src={game.background_image}
                 alt={game.name}
@@ -56,7 +56,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
                   <IoLogoXbox className="text-white" size={22} />
                 ) : null}
                 {game.platforms.find((platform) =>
-                  platform.platform.slug.includes("switch")
+                  platform.platform.slug.includes("nintendo")
                 ) ? (
                   <SiNintendoswitch className="text-white" size={22} />
                 ) : null}

@@ -83,7 +83,7 @@ const Tabs = ({ data, platform, setPlatform }: TabsProps) => {
 
   return (
     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-      <Tab.List className="mx-auto flex w-full gap-2 overflow-x-auto whitespace-nowrap rounded-xl bg-blue-900/80 p-1 sm:max-w-md">
+      <Tab.List className="mx-auto flex w-full gap-2 overflow-x-auto whitespace-nowrap rounded-xl bg-indigo-800/90 p-1 sm:max-w-md">
         {tabs.map((tab) => (
           <Tab
             key={tab.name}

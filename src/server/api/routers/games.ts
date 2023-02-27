@@ -14,7 +14,7 @@ export const gamesRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const response = await fetch(
-        `https://api.igdb.com/v4/games/?search=${input.query}&fields=name,cover.url,genres.name,platforms.name,summary,release_dates.human,aggregated_rating,aggregated_rating_count,game_modes.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,involved_companies.company.logo.url,involved_companies.company.websites.url,involved_companies.company.websites,videos.video_id; where rating > 75; sort aggregated_rating desc; limit 1;`,
+        `https://api.igdb.com/v4/games/?search=${input.query}&fields=name,screenshots.image_id,cover.url,genres.name,platforms.name,summary,release_dates.human,aggregated_rating,aggregated_rating_count,game_modes.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,involved_companies.company.logo.url,involved_companies.company.websites.url,involved_companies.company.websites,videos.video_id; where rating > 75; sort aggregated_rating desc; limit 1;`,
         {
           method: "POST",
           headers: {
@@ -30,6 +30,7 @@ export const gamesRouter = createTRPCRouter({
           message: `IGDB returned ${response.status} ${response.statusText}`,
         });
       }
+
       const games = (await response.json()) as IGame[];
       const firstGame = games[0] as IGame;
       return firstGame;

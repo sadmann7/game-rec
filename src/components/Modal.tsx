@@ -15,6 +15,8 @@ import ReactPlayer from "react-player/lazy";
 import { type IGame } from "@/types/globals";
 import { api } from "@/utils/api";
 import { extractYear } from "@/utils/format";
+import Image from "next/image";
+import ImageCarousel from "./ImageCarousel";
 import LikeButton from "./LikeButton";
 
 type ModalProps = {
@@ -37,6 +39,7 @@ const Modal = ({
   const [trailerId, setTrailerId] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [platforms, setPlatforms] = useState<PLATFORM[]>();
+  const [screenshots, setScreenshots] = useState<string[]>([]);
 
   // set dev
   useEffect(() => {
@@ -76,6 +79,19 @@ const Modal = ({
         }
       });
       setPlatforms(convertedPlatforms);
+    }
+  }, [game]);
+
+  // set screenshots
+  useEffect(() => {
+    if (!game) return;
+    if (game.screenshots) {
+      setScreenshots(
+        game.screenshots.map(
+          (screenshot) =>
+            `https://images.igdb.com/igdb/image/upload/t_screenshot_med_2x/${screenshot.image_id}.jpg`
+        )
+      );
     }
   }, [game]);
 
@@ -150,17 +166,33 @@ const Modal = ({
                       className="h-4 w-4 text-white group-hover:scale-105 group-active:scale-95"
                     />
                   </button>
-                  <ReactPlayer
-                    style={{ position: "absolute", top: 0, left: 0 }}
-                    url={`https://www.youtube.com/watch?v=${trailerId}`}
-                    width="100%"
-                    height="100%"
-                    controls={true}
-                    muted={false}
-                    playing={isPlaying}
-                    onPlay={() => setIsPlaying(true)}
-                    onPause={() => setIsPlaying(false)}
-                  />
+                  {trailerId ? (
+                    <ReactPlayer
+                      style={{ position: "absolute", top: 0, left: 0 }}
+                      url={`https://www.youtube.com/watch?v=${trailerId}`}
+                      width="100%"
+                      height="100%"
+                      controls={true}
+                      muted={false}
+                      playing={isPlaying}
+                      onPlay={() => setIsPlaying(true)}
+                      onPause={() => setIsPlaying(false)}
+                    />
+                  ) : game.screenshots ? (
+                    <ImageCarousel data={screenshots} />
+                  ) : (
+                    <Image
+                      src={`https:${game.cover.url.replace(
+                        "t_thumb",
+                        "t_cover_big"
+                      )}`}
+                      alt={game.name}
+                      width={1920}
+                      height={1080}
+                      className="aspect-video w-full object-cover"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
                 <div className="mx-6 mt-4 mb-6 grid gap-4">
                   <div className="flex items-center justify-between gap-5">
@@ -181,7 +213,7 @@ const Modal = ({
                           igdbId: game.id,
                           name: game.name,
                           description: game.summary ?? "",
-                          image: game.cover.url ?? "",
+                          image: game.cover ? game.cover.url : "",
                           rating: game.aggregated_rating ?? 0,
                           genres: game.genres.map((genre) => genre.name) ?? [],
                           platforms: platforms ?? [],

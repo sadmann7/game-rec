@@ -40,6 +40,11 @@ export type IGame = {
     developer: boolean;
     publisher: boolean;
   }[];
+  screenshots?: {
+    id: number;
+    image_id: string;
+    game: number;
+  }[];
   videos?: {
     id: number;
     video_id: string;
