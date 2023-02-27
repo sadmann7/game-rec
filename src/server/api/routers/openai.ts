@@ -65,8 +65,7 @@ export const openaiRouter = createTRPCRouter({
             name: name?.replace(/[0-9]+. /, "").trim(),
             description: description?.trim(),
           };
-        })
-        .filter((show) => show.name && show.description);
+        });
 
       const genCount = await ctx.prisma.genCount.findFirst();
       if (!genCount) {
