@@ -7,19 +7,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { RGameResult } from "@/types/globals";
 import { GrWindows } from "react-icons/gr";
 import { IoLogoPlaystation, IoLogoXbox } from "react-icons/io5";
-import {
-  SiActivision,
-  SiEpicgames,
-  SiGogdotcom,
-  SiNintendoswitch,
-  SiRiotgames,
-  SiSteam,
-} from "react-icons/si";
+import { SiNintendoswitch } from "react-icons/si";
 import Stars from "./Stars";
 
 const Hero = ({ data }: { data: RGameResult[] }) => {
   return (
-    <section aria-label="hero carousel" className="mb-14 w-full">
+    <section
+      aria-label="hero carousel"
+      className="mb-14 w-full max-w-screen-2xl"
+    >
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
@@ -30,30 +26,22 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
           pauseOnMouseEnter: true,
         }}
         modules={[Autoplay]}
-        className="relative aspect-video h-full max-h-96 w-full"
+        className="relative aspect-video h-80 w-full sm:h-96"
       >
         {data.map((game) => (
           <SwiperSlide key={game.id}>
-            <div className="absolute top-0 left-0 -z-10 w-full">
-              <div className="absolute inset-0 z-10 h-full w-full bg-black/50 bg-gradient-body from-gray-900/10 to-[#010511]" />
-              {game.background_image ? (
-                <Image
-                  src={game.background_image}
-                  alt={game.name}
-                  width={1920}
-                  height={1080}
-                  className="object-cover"
-                  priority
-                />
-              ) : null}
+            <div className="absolute inset-0 -z-10 h-screen w-full">
+              <div className="absolute inset-0 z-10 h-full w-full bg-black/80 bg-gradient-body from-black/10 to-transparent" />
+              <Image
+                src={game.background_image}
+                alt={game.name}
+                width={1920}
+                height={1080}
+                className="aspect-video h-80 w-full object-cover sm:h-96"
+                priority
+              />
             </div>
-            <div className="absolute inset-0 flex flex-col justify-end gap-2.5 p-4">
-              <h1 className="text-2xl font-bold text-white line-clamp-1">
-                {game.name}
-              </h1>
-              <p className="text-sm text-white">
-                {game.released ? game.released : "TBA"}
-              </p>
+            <div className="mx-auto mt-20 flex max-w-7xl flex-col items-center justify-center gap-4 px-4">
               <div className="flex items-center gap-2">
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("pc")
@@ -70,7 +58,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
                   <IoLogoPlaystation
                     key={crypto.randomUUID()}
                     className="text-white"
-                    size={20}
+                    size={22}
                   />
                 ) : null}
                 {game.platforms.find((platform) =>
@@ -92,88 +80,18 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
                   />
                 ) : null}
               </div>
-              <div className="flex items-center gap-2">
-                {game.stores?.map((store) => {
-                  switch (
-                    store.store.slug.match(
-                      /steam|epic|gog|riot|gog|activision|playstation|xbox|switch/
-                    )?.[0]
-                  ) {
-                    case "steam":
-                      return (
-                        <SiSteam
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "epic":
-                      return (
-                        <SiEpicgames
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "gog":
-                      return (
-                        <SiGogdotcom
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "riot":
-                      return (
-                        <SiRiotgames
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "activision":
-                      return (
-                        <SiActivision
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "playstation":
-                      return (
-                        <IoLogoPlaystation
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "xbox":
-                      return (
-                        <IoLogoXbox
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    case "switch":
-                      return (
-                        <SiNintendoswitch
-                          key={store.store.id}
-                          className="text-white"
-                          size={20}
-                        />
-                      );
-                    default:
-                      return null;
-                  }
-                })}
-              </div>
+              <h1 className="text-center text-3xl font-bold text-white line-clamp-2 sm:text-5xl">
+                {game.name}
+              </h1>
               <Stars rating={game.rating} />
-              <div className="flex items-center gap-2">
+              <p className="text-center text-sm text-white sm:text-base">
+                {game.released.split("-").reverse().join("/")}
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
                 {game.genres.map((genre) => (
                   <span
                     key={genre.id}
-                    className="rounded-full bg-gray-600 px-2 py-1 text-xs text-white"
+                    className="rounded-full bg-gray-700 px-3 py-1 text-xs text-white shadow-md"
                   >
                     {genre.name}
                   </span>

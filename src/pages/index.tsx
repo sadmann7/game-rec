@@ -100,7 +100,7 @@ const Home: NextPageWithLayout = () => {
         <Hero
           data={topGamesQuery.data.filter((game) => game.background_image)}
         />
-        <div className="container mx-auto grid place-items-center gap-10">
+        <div className="container mx-auto grid w-full max-w-6xl place-items-center gap-10 px-4">
           <motion.div
             className="flex max-w-5xl flex-col items-center gap-6"
             variants={itemFadeDown}

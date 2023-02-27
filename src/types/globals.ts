@@ -114,6 +114,18 @@ export type RGameResult = {
       name: string;
     };
   }[];
+  movies?: {
+    id: number;
+    name: string;
+    image: string;
+    preview: string;
+    data: {
+      max: string;
+      high: string;
+      medium: string;
+      low: string;
+    };
+  }[];
 };
 
 // OpenAI response
