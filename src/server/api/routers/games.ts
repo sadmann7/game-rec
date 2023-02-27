@@ -78,16 +78,14 @@ export const gamesRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(100),
         cursor: z.string().nullish(),
-        platform: z.nativeEnum(PLATFORM).optional().nullable(),
+        platform: z.nativeEnum(PLATFORM).optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const pGames = await ctx.prisma.pGame.findMany({
         take: input.limit + 1,
         where: {
-          platforms: {
-            has: input.platform ?? null,
-          },
+          platforms: input.platform ? { has: input.platform } : undefined,
         },
         distinct: ["id"],
         cursor: input.cursor ? { id: input.cursor } : undefined,

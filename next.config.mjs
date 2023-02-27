@@ -26,6 +26,10 @@ const config = {
         protocol: "https",
         hostname: "media.rawg.io",
       },
+      {
+        protocol: "https",
+        hostname: "images.igdb.com",
+      },
     ],
   },
 };
