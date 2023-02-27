@@ -31,7 +31,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
         {data.map((game) => (
           <SwiperSlide key={game.id}>
             <div className="absolute inset-0 -z-10 h-screen w-full">
-              <div className="absolute inset-0 z-10 h-full w-full bg-black/80 bg-gradient-body from-black/10 to-transparent" />
+              <div className="absolute inset-0 z-10 h-full w-full bg-black/60 bg-gradient-body from-black/10 to-transparent" />
               <Image
                 src={game.background_image}
                 alt={game.name}
@@ -91,7 +91,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
                 {game.genres.map((genre) => (
                   <span
                     key={genre.id}
-                    className="rounded-full bg-gray-700 px-3 py-1 text-xs text-white shadow-md"
+                    className="rounded-full bg-gray-500 px-3 py-1 text-xs font-medium text-white shadow-md"
                   >
                     {genre.name}
                   </span>

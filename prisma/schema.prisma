@@ -15,20 +15,22 @@ model GenCount {
 }
 
 model PGame {
-    id             String   @id @default(cuid())
-    igdbId         Int      @unique
-    name           String
-    description    String
-    image          String
-    avgRating      Float
-    avgRatingCount Int
-    gameModes      String[]
-    genres         String[]
-    platforms      String[]
-    developer      String
-    trailerId      String
-    releaseDate    String
-    favoriteCount  Int      @default(0)
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+    id            String     @id @default(cuid())
+    igdbId        Int        @unique
+    name          String
+    image         String
+    rating        Float
+    genres        String[]
+    platforms     PLATFORM[]
+    releaseDate   String
+    favoriteCount Int        @default(0)
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
+}
+
+enum PLATFORM {
+    PC
+    PLAYSTATION
+    XBOX
+    NINTENDO
 }

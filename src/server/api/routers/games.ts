@@ -1,5 +1,6 @@
 import { env } from "@/env.mjs";
 import type { IGame, RGame } from "@/types/globals";
+import { PLATFORM } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -77,12 +78,17 @@ export const gamesRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(100),
         cursor: z.string().nullish(),
+        platform: z.nativeEnum(PLATFORM).optional().nullable(),
       })
     )
     .query(async ({ ctx, input }) => {
       const pGames = await ctx.prisma.pGame.findMany({
         take: input.limit + 1,
-        where: {},
+        where: {
+          platforms: {
+            has: input.platform ?? null,
+          },
+        },
         distinct: ["id"],
         cursor: input.cursor ? { id: input.cursor } : undefined,
         orderBy: {
@@ -108,13 +114,9 @@ export const gamesRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         image: z.string(),
-        avgRating: z.number().min(0),
-        avgRatingCount: z.number().min(0),
-        gameModes: z.array(z.string()),
+        rating: z.number().min(0),
         genres: z.array(z.string()),
-        platforms: z.array(z.string()),
-        developer: z.string(),
-        trailerId: z.string(),
+        platforms: z.array(z.nativeEnum(PLATFORM)).default([PLATFORM.PC]),
         releaseDate: z.string(),
         favoriteCount: z.number(),
       })
@@ -132,15 +134,10 @@ export const gamesRouter = createTRPCRouter({
         create: {
           igdbId: input.igdbId,
           name: input.name,
-          description: input.description,
           image: input.image,
-          avgRating: input.avgRating,
-          avgRatingCount: input.avgRatingCount,
-          gameModes: input.gameModes,
+          rating: input.rating,
           genres: input.genres,
           platforms: input.platforms,
-          developer: input.developer,
-          trailerId: input.trailerId,
           releaseDate: input.releaseDate,
           favoriteCount: input.favoriteCount,
         },

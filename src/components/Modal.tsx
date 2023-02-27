@@ -8,14 +8,14 @@ import {
 } from "react";
 import { toast } from "react-hot-toast";
 import ReactPlayer from "react-player/lazy";
-// import { toast } from "react-toastify";
 
 // external imports
+import { type IGame } from "@/types/globals";
 import { api } from "@/utils/api";
+import { extractYear } from "@/utils/format";
+import { PLATFORM } from "@prisma/client";
 import { X } from "lucide-react";
 import LikeButton from "./LikeButton";
-import { type IGame } from "@/types/globals";
-import { extractYear } from "@/utils/format";
 
 type ModalProps = {
   isOpen: boolean;
@@ -89,6 +89,22 @@ const Modal = ({
     },
   });
 
+  // convert platform name to enum of type PLATFORM
+  const platforms = game.platforms.map((platform) => {
+    switch (platform.name.match(/(PC|PlayStation|Xbox|Nintendo)/)?.[0]) {
+      case "PC":
+        return PLATFORM.PC;
+      case "PlayStation":
+        return PLATFORM.PLAYSTATION;
+      case "Xbox":
+        return PLATFORM.XBOX;
+      case "Nintendo":
+        return PLATFORM.NINTENDO;
+      default:
+        return PLATFORM.PC;
+    }
+  });
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
@@ -159,16 +175,9 @@ const Modal = ({
                           name: game.name,
                           description: game.summary ?? "",
                           image: game.cover.url ?? "",
-                          avgRating: game.aggregated_rating ?? 0,
-                          avgRatingCount: game.aggregated_rating_count ?? 0,
-                          gameModes:
-                            game.game_modes.map((mode) => mode.name) ?? [],
+                          rating: game.aggregated_rating ?? 0,
                           genres: game.genres.map((genre) => genre.name) ?? [],
-                          platforms:
-                            game.platforms.map((platform) => platform.name) ??
-                            [],
-                          developer: dev ?? "Unknown Dev",
-                          trailerId: trailerId,
+                          platforms: platforms ?? [],
                           releaseDate:
                             game.release_dates[game.release_dates.length - 1]
                               ?.human ?? "",
