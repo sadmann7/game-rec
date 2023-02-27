@@ -90,7 +90,7 @@ const Home: NextPageWithLayout = () => {
         <title>Game Recommender</title>
       </Head>
       <motion.main
-        className="mb-10"
+        className="mb-5"
         initial="hidden"
         whileInView="visible"
         animate="visible"
@@ -115,7 +115,7 @@ const Home: NextPageWithLayout = () => {
           </motion.div>
           <motion.form
             aria-label="generate show from"
-            className="mt-5 grid w-full max-w-3xl gap-5"
+            className="grid w-full max-w-3xl gap-5"
             variants={itemFadeDown}
             onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}
           >
@@ -151,7 +151,7 @@ const Home: NextPageWithLayout = () => {
             </Button>
           </motion.form>
           <motion.div
-            className="mt-5 w-full max-w-3xl"
+            className="w-full max-w-3xl"
             ref={generatedRef}
             variants={itemFadeDown}
           >

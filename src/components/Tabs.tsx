@@ -10,7 +10,7 @@ import { twMerge } from "tailwind-merge";
 // external imports
 import Modal from "@/components/Modal";
 import { api, type RouterOutputs } from "@/utils/api";
-import { containerReveal, itemPopUp } from "@/utils/constants";
+import { containerReveal, itemFadeDown } from "@/utils/constants";
 import { GrWindows } from "react-icons/gr";
 import { IoLogoPlaystation, IoLogoXbox } from "react-icons/io5";
 import { SiNintendoswitch } from "react-icons/si";
@@ -161,7 +161,7 @@ const GameCard = ({ game }: { game: PGame }) => {
       className="rounded-md bg-blue-900/20"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      variants={itemPopUp}
+      variants={itemFadeDown}
     >
       {findGameMutation.isSuccess ? (
         <Modal
@@ -211,25 +211,22 @@ const GameCard = ({ game }: { game: PGame }) => {
               : "TBA"}
           </p>
           <div className="mt-1 flex items-center gap-2">
-            {game.platforms.map((platform) =>
-              platform === PLATFORM.PC ? (
-                <GrWindows key={platform} className="text-white" size={20} />
-              ) : platform === PLATFORM.PLAYSTATION ? (
-                <IoLogoPlaystation
-                  key={platform}
-                  className="text-white"
-                  size={22}
-                />
-              ) : platform === PLATFORM.XBOX ? (
-                <IoLogoXbox key={platform} className="text-white" size={20} />
-              ) : platform === PLATFORM.NINTENDO ? (
-                <SiNintendoswitch
-                  key={platform}
-                  className="text-white"
-                  size={20}
-                />
-              ) : null
-            )}
+            {game.platforms.find((platform) => platform === PLATFORM.PC) ? (
+              <GrWindows className="text-white" size={20} />
+            ) : null}
+            {game.platforms.find(
+              (platform) => platform === PLATFORM.PLAYSTATION
+            ) ? (
+              <IoLogoPlaystation className="text-white" size={22} />
+            ) : null}
+            {game.platforms.find((platform) => platform === PLATFORM.XBOX) ? (
+              <IoLogoXbox className="text-white" size={20} />
+            ) : null}
+            {game.platforms.find(
+              (platform) => platform === PLATFORM.NINTENDO
+            ) ? (
+              <SiNintendoswitch className="text-white" size={20} />
+            ) : null}
           </div>
         </div>
       </div>

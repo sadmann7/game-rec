@@ -21,6 +21,7 @@ export type IGame = {
   aggregated_rating?: number;
   aggregated_rating_count?: number;
   game_modes: {
+    id: number;
     name: string;
   }[];
   involved_companies: {

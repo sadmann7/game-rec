@@ -1,4 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
+import { PLATFORM } from "@prisma/client";
+import { X } from "lucide-react";
 import {
   Fragment,
   useEffect,
@@ -13,8 +15,6 @@ import ReactPlayer from "react-player/lazy";
 import { type IGame } from "@/types/globals";
 import { api } from "@/utils/api";
 import { extractYear } from "@/utils/format";
-import { PLATFORM } from "@prisma/client";
-import { X } from "lucide-react";
 import LikeButton from "./LikeButton";
 
 type ModalProps = {
@@ -36,6 +36,7 @@ const Modal = ({
   const [dev, setDev] = useState<string>("");
   const [trailerId, setTrailerId] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [platforms, setPlatforms] = useState<PLATFORM[]>();
 
   // set dev
   useEffect(() => {
@@ -53,6 +54,28 @@ const Modal = ({
     if (!game) return;
     if (game.videos) {
       setTrailerId(game.videos[0]?.video_id ?? "");
+    }
+  }, [game]);
+
+  // convert platform name to enum of type PLATFORM
+  useEffect(() => {
+    if (!game) return;
+    if (game.platforms) {
+      const convertedPlatforms = game.platforms.map((platform) => {
+        switch (platform.name.match(/(PC|PlayStation|Xbox|Nintendo)/)?.[0]) {
+          case "PC":
+            return PLATFORM.PC;
+          case "PlayStation":
+            return PLATFORM.PLAYSTATION;
+          case "Xbox":
+            return PLATFORM.XBOX;
+          case "Nintendo":
+            return PLATFORM.NINTENDO;
+          default:
+            return PLATFORM.PC;
+        }
+      });
+      setPlatforms(convertedPlatforms);
     }
   }, [game]);
 
@@ -89,22 +112,6 @@ const Modal = ({
     },
   });
 
-  // convert platform name to enum of type PLATFORM
-  const platforms = game.platforms.map((platform) => {
-    switch (platform.name.match(/(PC|PlayStation|Xbox|Nintendo)/)?.[0]) {
-      case "PC":
-        return PLATFORM.PC;
-      case "PlayStation":
-        return PLATFORM.PLAYSTATION;
-      case "Xbox":
-        return PLATFORM.XBOX;
-      case "Nintendo":
-        return PLATFORM.NINTENDO;
-      default:
-        return PLATFORM.PC;
-    }
-  });
-
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
@@ -130,7 +137,7 @@ const Modal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-md bg-neutral-900 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-md bg-neutral-900 text-left align-middle shadow-xl transition-all">
                 <div className="relative aspect-video">
                   <button
                     type="button"
@@ -155,7 +162,7 @@ const Modal = ({
                     onPause={() => setIsPlaying(false)}
                   />
                 </div>
-                <div className="mx-6 mt-4 mb-6 grid gap-2">
+                <div className="mx-6 mt-4 mb-6 grid gap-4">
                   <div className="flex items-center justify-between gap-5">
                     <Dialog.Title
                       as="h3"
@@ -206,39 +213,43 @@ const Modal = ({
                         <span>|</span>
                       </Fragment>
                     ) : null}
-                    {game.game_modes ? (
-                      <Fragment>
-                        <span>
-                          {game.game_modes
-                            .map((gmode) => gmode.name)
-                            .join(", ")}
-                        </span>
-                        <span>|</span>
-                      </Fragment>
-                    ) : null}
                     {dev ? <span>{dev}</span> : null}
-                  </div>
-                  <div className="text-xs sm:text-sm">
-                    <span className="font-medium text-white">Buy on:</span>{" "}
-                    <a
-                      aria-label="buy on steam"
-                      href={`https://store.steampowered.com/search/?term=${game.name}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      Steam
-                    </a>
                   </div>
                   <p className="text-xs text-white line-clamp-3 sm:text-sm">
                     {game.summary ?? "-"}
                   </p>
                   {game.genres ? (
-                    <div className="flex items-center gap-2 text-xs sm:text-sm">
-                      <span className="font-medium text-white">Genres:</span>
-                      <span className="text-gray-100">
-                        {game.genres.map((genre) => genre.name).join(", ")}
+                    <div className="grid gap-2">
+                      <span className="text-xs font-medium text-white sm:text-sm">
+                        Genres:
                       </span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {game.genres.map((genre) => (
+                          <span
+                            key={genre.id}
+                            className="rounded-full bg-gray-700 px-2 py-1 text-xs text-white"
+                          >
+                            {genre.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                  {game.game_modes ? (
+                    <div className="grid gap-2">
+                      <span className="text-xs font-medium text-white sm:text-sm">
+                        Game Modes:
+                      </span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {game.game_modes.map((gmode) => (
+                          <span
+                            key={gmode.id}
+                            className="rounded-full bg-gray-700 px-2 py-1 text-xs text-white"
+                          >
+                            {gmode.name}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   ) : null}
                 </div>

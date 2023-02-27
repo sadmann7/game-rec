@@ -12,10 +12,7 @@ import Stars from "./Stars";
 
 const Hero = ({ data }: { data: RGameResult[] }) => {
   return (
-    <section
-      aria-label="hero carousel"
-      className="mb-14 w-full max-w-screen-2xl"
-    >
+    <section aria-label="hero carousel" className="mb-10 w-full">
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
@@ -26,58 +23,42 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
           pauseOnMouseEnter: true,
         }}
         modules={[Autoplay]}
-        className="relative aspect-video h-80 w-full sm:h-96"
+        className="relative mx-auto aspect-video h-96 w-full max-w-screen-2xl"
       >
         {data.map((game) => (
           <SwiperSlide key={game.id}>
             <div className="absolute inset-0 -z-10 h-screen w-full">
-              <div className="absolute inset-0 z-10 h-full w-full bg-black/60 bg-gradient-body from-black/10 to-transparent" />
+              <div className="absolute inset-0 z-10 h-full w-full bg-black/60 bg-gradient-body from-gray-900/10 to-[#010511]" />
               <Image
                 src={game.background_image}
                 alt={game.name}
                 width={1920}
                 height={1080}
-                className="aspect-video h-80 w-full object-cover sm:h-96"
+                className="aspect-video h-96 w-full object-cover"
                 priority
               />
             </div>
-            <div className="mx-auto mt-20 flex max-w-7xl flex-col items-center justify-center gap-4 px-4">
-              <div className="flex items-center gap-2">
+            <div className="mx-auto mt-28 flex max-w-7xl flex-col items-center justify-center gap-4 px-4">
+              <div className="flex items-center gap-2.5">
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("pc")
                 ) ? (
-                  <GrWindows
-                    key={crypto.randomUUID()}
-                    className="text-white"
-                    size={20}
-                  />
+                  <GrWindows className="text-white" size={22} />
                 ) : null}
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("playstation")
                 ) ? (
-                  <IoLogoPlaystation
-                    key={crypto.randomUUID()}
-                    className="text-white"
-                    size={22}
-                  />
+                  <IoLogoPlaystation className="text-white" size={26} />
                 ) : null}
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("xbox")
                 ) ? (
-                  <IoLogoXbox
-                    key={crypto.randomUUID()}
-                    className="text-white"
-                    size={20}
-                  />
+                  <IoLogoXbox className="text-white" size={22} />
                 ) : null}
                 {game.platforms.find((platform) =>
                   platform.platform.slug.includes("switch")
                 ) ? (
-                  <SiNintendoswitch
-                    key={crypto.randomUUID()}
-                    className="text-white"
-                    size={20}
-                  />
+                  <SiNintendoswitch className="text-white" size={22} />
                 ) : null}
               </div>
               <h1 className="text-center text-3xl font-bold text-white line-clamp-2 sm:text-5xl">
