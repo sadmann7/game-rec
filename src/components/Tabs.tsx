@@ -11,9 +11,7 @@ import { twMerge } from "tailwind-merge";
 import Modal from "@/components/Modal";
 import { api, type RouterOutputs } from "@/utils/api";
 import { containerReveal, itemFadeDown } from "@/utils/constants";
-import { GrWindows } from "react-icons/gr";
-import { IoLogoPlaystation, IoLogoXbox } from "react-icons/io5";
-import { SiNintendoswitch } from "react-icons/si";
+import PlatformIcons from "./PlatformIcons";
 
 type TabsProps = {
   data: RouterOutputs["games"]["getPaginated"][];
@@ -210,24 +208,7 @@ const GameCard = ({ game }: { game: PGame }) => {
               ? dayjs(game.releaseDate).format("DD/MM/YYYY")
               : "TBA"}
           </p>
-          <div className="mt-1 flex items-center gap-2">
-            {game.platforms.find((platform) => platform === PLATFORM.PC) ? (
-              <GrWindows className="text-white" size={20} />
-            ) : null}
-            {game.platforms.find(
-              (platform) => platform === PLATFORM.PLAYSTATION
-            ) ? (
-              <IoLogoPlaystation className="text-white" size={22} />
-            ) : null}
-            {game.platforms.find((platform) => platform === PLATFORM.XBOX) ? (
-              <IoLogoXbox className="text-white" size={20} />
-            ) : null}
-            {game.platforms.find(
-              (platform) => platform === PLATFORM.NINTENDO
-            ) ? (
-              <SiNintendoswitch className="text-white" size={20} />
-            ) : null}
-          </div>
+          <PlatformIcons className="mt-2.5" platforms={game.platforms} />
         </div>
       </div>
     </motion.div>

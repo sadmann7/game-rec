@@ -43,7 +43,7 @@ const Header = () => {
       aria-label="header"
       className={`fixed top-0 left-0 z-20 flex w-full items-center gap-4 ${
         isScrolled
-          ? "bg-neutral-500/30 shadow-md backdrop-blur-md backdrop-saturate-150 backdrop-filter transition-all duration-300 ease-in-out"
+          ? "bg-neutral-500/80 shadow-md backdrop-blur-md backdrop-saturate-150 backdrop-filter transition-all duration-300 ease-in-out"
           : "bg-transparent"
       }`}
       onScroll={handleScroll}

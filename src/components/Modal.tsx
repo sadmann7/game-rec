@@ -18,6 +18,7 @@ import { extractYear } from "@/utils/format";
 import Image from "next/image";
 import ImageCarousel from "./ImageCarousel";
 import LikeButton from "./LikeButton";
+import PlatformIcons from "./PlatformIcons";
 
 type ModalProps = {
   isOpen: boolean;
@@ -282,6 +283,14 @@ const Modal = ({
                           </span>
                         ))}
                       </div>
+                    </div>
+                  ) : null}
+                  {platforms ? (
+                    <div className="grid gap-2">
+                      <span className="text-xs font-medium text-white sm:text-sm">
+                        Platforms:
+                      </span>
+                      <PlatformIcons platforms={platforms} />
                     </div>
                   ) : null}
                 </div>

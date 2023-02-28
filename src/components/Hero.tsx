@@ -5,12 +5,61 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // external imports
 import type { RGameResult } from "@/types/globals";
-import { GrWindows } from "react-icons/gr";
-import { IoLogoPlaystation, IoLogoXbox } from "react-icons/io5";
-import { SiNintendoswitch } from "react-icons/si";
+import { PLATFORM } from "@prisma/client";
+import { useEffect, useState } from "react";
+import PlatformIcons from "./PlatformIcons";
 import Stars from "./Stars";
 
 const Hero = ({ data }: { data: RGameResult[] }) => {
+  const [swiperIndex, setSwiperIndex] = useState<number>(0);
+  const [platforms, setPlatforms] = useState<PLATFORM[]>([]);
+
+  const demoPlatforms = [
+    {
+      id: 4,
+      name: "PC",
+      slug: "pc",
+    },
+    {
+      id: 187,
+      name: "PlayStation 5",
+      slug: "playstation5",
+    },
+    {
+      id: 1,
+      name: "Xbox One",
+      slug: "xbox-one",
+    },
+    {
+      id: 18,
+      name: "PlayStation 4",
+      slug: "playstation4",
+    },
+  ];
+
+  useEffect(() => {
+    if (!data) return;
+    if (!data[swiperIndex]?.platforms) return;
+    const convertedPlatforms = data[swiperIndex]?.platforms.map((platform) => {
+      switch (
+        platform.platform.slug.match(/pc|playstation|xbox|nintendo/gi)?.[0]
+      ) {
+        case "pc":
+          return PLATFORM.PC;
+        case "playstation":
+          return PLATFORM.PLAYSTATION;
+        case "xbox":
+          return PLATFORM.XBOX;
+        case "nintendo":
+          return PLATFORM.NINTENDO;
+        default:
+          return PLATFORM.PC;
+      }
+    });
+    if (!convertedPlatforms) return;
+    setPlatforms(convertedPlatforms);
+  }, [data, swiperIndex]);
+
   return (
     <section aria-label="hero carousel" className="mb-10 w-full">
       <Swiper
@@ -22,6 +71,7 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
+        onSlideChange={(swiper) => setSwiperIndex(swiper.activeIndex)}
         modules={[Autoplay]}
         className="relative mx-auto aspect-video h-96 w-full max-w-screen-2xl"
       >
@@ -39,28 +89,12 @@ const Hero = ({ data }: { data: RGameResult[] }) => {
               />
             </div>
             <div className="mx-auto mt-28 flex max-w-7xl flex-col items-center justify-center gap-4 px-4">
-              <div className="flex items-center gap-2.5">
-                {game.platforms.find((platform) =>
-                  platform.platform.slug.includes("pc")
-                ) ? (
-                  <GrWindows className="text-white" size={22} />
-                ) : null}
-                {game.platforms.find((platform) =>
-                  platform.platform.slug.includes("playstation")
-                ) ? (
-                  <IoLogoPlaystation className="text-white" size={26} />
-                ) : null}
-                {game.platforms.find((platform) =>
-                  platform.platform.slug.includes("xbox")
-                ) ? (
-                  <IoLogoXbox className="text-white" size={22} />
-                ) : null}
-                {game.platforms.find((platform) =>
-                  platform.platform.slug.includes("nintendo")
-                ) ? (
-                  <SiNintendoswitch className="text-white" size={22} />
-                ) : null}
-              </div>
+              <PlatformIcons
+                className="gap-2.5"
+                platforms={platforms}
+                size={22}
+                sizeAlt={28}
+              />
               <h1 className="text-center text-3xl font-bold text-white line-clamp-2 sm:text-5xl">
                 {game.name}
               </h1>

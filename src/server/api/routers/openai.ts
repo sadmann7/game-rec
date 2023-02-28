@@ -20,7 +20,7 @@ export const openaiRouter = createTRPCRouter({
       }
 
       const prompt = `Suggest me 5 popular games of the same genre or mood as ${input.game}. 
-      Make sure to add a small description. Please reference the RAWG game database for generating new games. 
+      Make sure to add a small description. Make sure to suggest games that are not already in the list.
       """ 
       You can use the following template: 1. Name - Description. 
       For example: 1. The Last of Us - A post-apocalyptic survival horror game. 
