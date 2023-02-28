@@ -10,7 +10,7 @@ const navLinks = [
   {
     name: "Github",
     icon: <Github aria-hidden="true" className="h-6 w-6" />,
-    href: "https://github.com/sadmann7/watchcopilot.git",
+    href: "https://github.com/sadmann7/game-rec.git",
     isExternal: true,
   },
   {
