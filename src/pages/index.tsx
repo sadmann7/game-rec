@@ -169,11 +169,9 @@ const Home: NextPageWithLayout = () => {
                   ref={ref}
                   variants={containerReveal}
                 >
-                  {generateGameMutation.data.formattedData
-                    .filter((game) => game.description && game.description)
-                    .map((game) => (
-                      <GameCard key={game.name} game={game} />
-                    ))}
+                  {generateGameMutation.data.formattedData.map((game) => (
+                    <GameCard key={game.name} game={game} />
+                  ))}
                 </motion.div>
               </div>
             ) : null}
