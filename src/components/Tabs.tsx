@@ -81,13 +81,13 @@ const Tabs = ({ data, platform, setPlatform }: TabsProps) => {
 
   return (
     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-      <Tab.List className="mx-auto flex w-full gap-2 overflow-x-auto whitespace-nowrap rounded-xl bg-indigo-800/90 p-1 sm:max-w-md">
+      <Tab.List className="mx-auto flex w-full gap-2 overflow-x-auto whitespace-nowrap rounded-xl bg-violet-800/90 p-1 sm:max-w-md">
         {tabs.map((tab) => (
           <Tab
             key={tab.name}
             onClick={tab.onClick}
             className={twMerge(
-              "w-full rounded-lg py-2.5 px-4 text-sm font-medium leading-5 text-blue-700",
+              "w-full rounded-lg py-2.5 px-4 text-sm font-medium leading-5 text-violet-700",
               "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
               "ui-selected:bg-white ui-selected:shadow",
               "ui-not-selected:text-blue-100 ui-not-selected:hover:bg-white/[0.12] ui-not-selected:hover:text-white"
