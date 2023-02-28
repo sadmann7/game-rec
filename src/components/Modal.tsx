@@ -183,7 +183,7 @@ const Modal = ({
                     />
                   ) : game.screenshots ? (
                     <ImageCarousel data={screenshots} />
-                  ) : (
+                  ) : game.cover ? (
                     <Image
                       src={`https:${game.cover.url.replace(
                         "t_thumb",
@@ -195,6 +195,17 @@ const Modal = ({
                       className="aspect-video w-full object-cover"
                       loading="lazy"
                     />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gray-900/80">
+                      <Image
+                        src="/images/placeholder.png"
+                        alt={game.name}
+                        width={1920}
+                        height={1080}
+                        className="aspect-video w-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="mx-6 mt-4 mb-6 grid gap-4">
