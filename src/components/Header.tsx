@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // external imports
-import { Airplay, Github, Heart } from "lucide-react";
+import { Github, Heart } from "lucide-react";
+import { IoGameControllerOutline } from "react-icons/io5";
 
 const navLinks = [
   {
@@ -54,7 +55,7 @@ const Header = () => {
           href="/"
           className="flex items-center gap-2 text-gray-100 transition-colors hover:text-white active:text-gray-100"
         >
-          <Airplay aria-hidden="true" className="h-5 w-5" />
+          <IoGameControllerOutline aria-hidden="true" size={26} />
           <span className="text-xl font-medium">GameRec</span>
         </Link>
         <div className="flex items-center gap-2">
