@@ -120,7 +120,7 @@ const Modal = ({
             ...page,
             pGames: page.pGames.map((pGame) => ({
               ...pGame,
-              favoriteCount: isLiked ? -1 : 1,
+              favoriteCount: pGame.favoriteCount + (isLiked ? -1 : 1),
             })),
           })),
         };
@@ -221,7 +221,7 @@ const Modal = ({
                         isLiked ? "add to favorites" : "remove from favorites"
                       }
                       isLiked={isLiked}
-                      likeCount={updateGameMutation.data?.favoriteCount}
+                      likeCount={Number(updateGameMutation.data?.favoriteCount)}
                       onClick={() => {
                         setIsLiked(!isLiked);
                         updateGameMutation.mutate({

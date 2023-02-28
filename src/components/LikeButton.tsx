@@ -10,7 +10,7 @@ import { Heart } from "lucide-react";
 
 type LikeButtonProps = {
   isLiked: boolean;
-  likeCount?: number;
+  likeCount: number;
 } & DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
@@ -19,7 +19,7 @@ type LikeButtonProps = {
 
 const LikeButton = ({
   isLiked,
-  likeCount = 1,
+  likeCount,
   className,
   disabled,
   ...props
