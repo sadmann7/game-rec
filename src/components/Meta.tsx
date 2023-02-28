@@ -8,7 +8,7 @@ type MetaProps = {
 
 const Meta = ({
   title = "Game Recommender",
-  description = "Discover your next favorite game",
+  description = "Discover your next favorite game with AI",
   image = "https://gamewizzy.vercel.app/api/og?title=Game%Wizzy&description=Discover%your%next%20favorite%game",
 }: MetaProps) => {
   return (

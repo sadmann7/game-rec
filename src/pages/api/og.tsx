@@ -36,7 +36,7 @@ export default function handler(req: NextRequest) {
               />
             }
           </div>
-          <div tw="flex max-w-2xl items-center justify-center flex-col mt-10">
+          <div tw="flex max-w-xl items-center justify-center flex-col mt-10">
             <div tw="text-5xl font-bold whitespace-pre-wrap tracking-tight leading-tight text-white px-8">
               {title}
             </div>

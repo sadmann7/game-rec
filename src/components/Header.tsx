@@ -55,7 +55,7 @@ const Header = () => {
           className="flex items-center gap-2 text-gray-100 transition-colors hover:text-white active:text-gray-100"
         >
           <Airplay aria-hidden="true" className="h-5 w-5" />
-          <span className="text-xl font-medium">GameWizzy</span>
+          <span className="text-xl font-medium">GameRec</span>
         </Link>
         <div className="flex items-center gap-2">
           {navLinks.map((link, index) =>
