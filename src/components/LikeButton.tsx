@@ -10,26 +10,39 @@ import { Heart } from "lucide-react";
 
 type LikeButtonProps = {
   isLiked: boolean;
+  likeCount?: number;
 } & DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > &
   ComponentProps<typeof motion.button>;
 
-const LikeButton = ({ isLiked, className, ...props }: LikeButtonProps) => {
+const LikeButton = ({
+  isLiked,
+  likeCount = 1,
+  className,
+  disabled,
+  ...props
+}: LikeButtonProps) => {
   return (
-    <motion.button
-      className={`aspect-square w-5 ${className ?? ""}`}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      {...props}
-    >
-      {isLiked ? (
-        <Heart aria-hidden="true" className="fill-current text-red-600" />
-      ) : (
-        <Heart aria-hidden="true" className="text-red-600" />
-      )}
-    </motion.button>
+    <div className="flex items-center gap-2 disabled:cursor-not-allowed">
+      {likeCount > 0 ? (
+        <span className="text-sm font-semibold text-white">{likeCount}</span>
+      ) : null}
+      <motion.button
+        className={`h-5 w-5 ${className ?? ""} ${
+          disabled ? "cursor-auto opacity-90" : ""
+        }`}
+        whileHover={{ scale: disabled ? 1 : 1.1 }}
+        whileTap={{ scale: disabled ? 1 : 0.9 }}
+        {...props}
+      >
+        <Heart
+          aria-hidden="true"
+          className={`text-red-600 ${isLiked ? "fill-current" : ""}`}
+        />
+      </motion.button>
+    </div>
   );
 };
 

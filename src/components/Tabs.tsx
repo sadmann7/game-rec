@@ -168,6 +168,7 @@ const GameCard = ({ game }: { game: PGame }) => {
           game={findGameMutation.data}
           isLiked={isLiked}
           setIsLiked={setIsLiked}
+          isDisabled={true}
         />
       ) : null}
       <div

@@ -12,7 +12,7 @@ import Stars from "./Stars";
 
 const Hero = ({ data }: { data: RGameResult[] }) => {
   return (
-    <section aria-label="hero carousel" className="mb-10 w-full">
+    <section aria-label="hero carousel" className="mb-8 w-full">
       <Swiper
         slidesPerView={1}
         spaceBetween={20}

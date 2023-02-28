@@ -26,6 +26,7 @@ type ModalProps = {
   game: IGame;
   isLiked: boolean;
   setIsLiked: Dispatch<SetStateAction<boolean>>;
+  isDisabled?: boolean;
 };
 
 const Modal = ({
@@ -34,6 +35,7 @@ const Modal = ({
   game,
   isLiked,
   setIsLiked,
+  isDisabled = false,
 }: ModalProps) => {
   const apiUtils = api.useContext();
   const [dev, setDev] = useState<string>("");
@@ -208,6 +210,7 @@ const Modal = ({
                         isLiked ? "add to favorites" : "remove from favorites"
                       }
                       isLiked={isLiked}
+                      likeCount={updateGameMutation.data?.favoriteCount ?? 0}
                       onClick={() => {
                         setIsLiked(!isLiked);
                         updateGameMutation.mutate({
@@ -224,6 +227,7 @@ const Modal = ({
                           favoriteCount: isLiked ? -1 : 1,
                         });
                       }}
+                      disabled={updateGameMutation.isLoading || isDisabled}
                     />
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-200 sm:text-sm">

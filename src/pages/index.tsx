@@ -90,7 +90,6 @@ const Home: NextPageWithLayout = () => {
         <title>Game Recommender</title>
       </Head>
       <motion.main
-        className="mb-5"
         initial="hidden"
         whileInView="visible"
         animate="visible"
@@ -100,9 +99,9 @@ const Home: NextPageWithLayout = () => {
         <Hero
           data={topGamesQuery.data.filter((game) => game.background_image)}
         />
-        <div className="container mx-auto grid w-full max-w-6xl place-items-center gap-10 px-4">
+        <div className="container mx-auto grid w-full max-w-6xl place-items-center gap-8 px-4">
           <motion.div
-            className="flex max-w-5xl flex-col items-center gap-6"
+            className="flex max-w-5xl flex-col items-center gap-5"
             variants={itemFadeDown}
           >
             <h1 className="mx-auto text-center text-4xl font-bold text-white sm:text-6xl">

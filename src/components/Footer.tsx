@@ -15,6 +15,16 @@ const Footer = () => {
           </a>
           {", "}
           <a
+            aria-label="navigate to rawg"
+            href="https://rawg.io/"
+            target="_blank"
+            rel="noreferrer"
+            className="font-semibold text-gray-200 transition-colors hover:text-white active:text-gray-100"
+          >
+            RAWG
+          </a>
+          {", "}
+          <a
             aria-label="navigate to igdb"
             href="https://api-docs.igdb.com/#getting-started"
             target="_blank"
