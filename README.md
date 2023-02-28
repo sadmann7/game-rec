@@ -1,8 +1,8 @@
-# [GameWizzy](https://gamewizzy.vercel.app/)
+# [GameRec](https://gamerec.vercel.app/)
 
 This project recommends games with OpenAI. By clicking on the recommended games, you can see the details of the game fetched from RAWG and IGDB APIs. It is bootstrapped with the [T3 Stack](https://create.t3.gg/).
 
-[![GameWizzy](./public/screenshot.png)](https://gamewizzy.vercel.app/)
+[![GameRec](./public/screenshot.png)](https://gamerec.vercel.app/)
 
 ## Tech Stack
 
@@ -26,7 +26,7 @@ This project recommends games with OpenAI. By clicking on the recommended games,
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/sadmann7/game-wizzy.git
+git clone https://github.com/sadmann7/game-rec.git
 ```
 
 ### 2. Install dependencies
